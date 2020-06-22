@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/message_profile_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_account"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"/>
+
+    <LinearLayout
+        android:id="@+id/receive_mess_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/reciever_messages_layout"
+        android:layout_toEndOf="@id/message_profile_image"
+        android:layout_marginLeft="3dp"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/recieved_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="recieved message"
+            android:textColor="@color/darker_gray"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:textSize="16dp"/>
+
+        <TextView
+            android:id="@+id/recieved_message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textSize="12sp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="end"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="3dp"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sent_mess_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/sender_messages_layout"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="5dp">
+        <TextView
+            android:id="@+id/sent_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="sent message"
+            android:textColor="@android:color/darker_gray"
+            android:paddingBottom="5dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:textSize="16dp"/>
+
+
+
+        <TextView
+            android:id="@+id/sent_message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginBottom="3dp"
+            android:layout_gravity="end"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_alignBottom="@id/sent_message"
+            android:layout_toLeftOf="@id/message_sent_indicator"/>
+    </LinearLayout>
+
+
+
+    <ImageView
+        android:id="@+id/message_sent_indicator"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="3dp"
+        android:layout_marginRight="7dp"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_check"
+        android:visibility="invisible"
+        android:layout_alignBottom="@id/sent_mess_ll"/>
+
+    <ImageView
+        android:id="@+id/message_read_indicator"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@id/sent_mess_ll"
+        android:layout_marginBottom="3dp"
+        android:layout_marginRight="10dp"
+        android:background="@color/transparent"
+        android:src="@drawable/ic_check"
+        android:visibility="invisible"/>
+
+
+</RelativeLayout>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <ImageButton
+        android:id="@+id/go_to_chat_btn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_message"
+        android:background="@color/transparent"
+        android:layout_alignParentRight="true"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/account_image"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:src="@drawable/ic_account"
+        android:layout_margin="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/go_to_chat_btn"/>
+
+    <TextView
+        android:id="@+id/account_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:textSize="20sp"
+        android:layout_below="@id/account_image"
+        android:layout_margin="20dp"
+        android:layout_alignParentRight="true"/>
+    <TextView
+        android:id="@+id/title_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name:"
+        android:textSize="20sp"
+        android:layout_below="@id/account_image"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/account_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textSize="20sp"
+        android:layout_below="@id/account_name"
+        android:layout_margin="20dp"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/title_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email:"
+        android:textSize="20sp"
+        android:layout_below="@id/account_name"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/account_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone"
+        android:textSize="20sp"
+        android:layout_below="@id/account_email"
+        android:layout_margin="20dp"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/title_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Phone:"
+        android:textSize="20sp"
+        android:layout_below="@id/account_email"
+        android:layout_margin="20dp"/>
+
+    <TextView
+        android:id="@+id/account_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address"
+        android:textSize="20sp"
+        android:layout_below="@id/account_phone"
+        android:layout_margin="20dp"
+        android:layout_alignParentRight="true"/>
+
+    <TextView
+        android:id="@+id/title_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Address:"
+        android:textSize="20sp"
+        android:layout_below="@id/account_phone"
+        android:layout_margin="20dp"/>
+
+    <ImageButton
+        android:id="@+id/logout_btn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_logout"
+        android:background="@color/transparent"
+        android:layout_alignParentRight="true"/>
+
+
+</RelativeLayout>
