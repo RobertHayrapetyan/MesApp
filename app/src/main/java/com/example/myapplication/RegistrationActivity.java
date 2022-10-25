@@ -1,43 +1,35 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.util.HashMap;
-
-import de.hdodenhof.circleimageview.CircleImageView;
+import java.util.Objects;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private Button registerBtn;
     private EditText userFirstName, userLastName, userPhone, userEmail, userAddress, userPassword;
     private ImageView userImage;
     private FirebaseAuth mAuth;
     private StorageReference storageProfilePictureRef;
-    private StorageTask uploadTask;
     private ProgressDialog loadingBar;
     private String checker = "";
     private Uri imageUri;
@@ -53,33 +45,25 @@ public class RegistrationActivity extends AppCompatActivity {
 
         loadingBar = new ProgressDialog(this);
 
-        userFirstName = (EditText)findViewById(R.id.user_first_name);
-        userLastName = (EditText)findViewById(R.id.user_last_name);
-        userPhone = (EditText)findViewById(R.id.user_phone_number);
-        userEmail = (EditText)findViewById(R.id.user_email);
-        userAddress = (EditText)findViewById(R.id.user_address);
-        userPassword = (EditText)findViewById(R.id.user_password);
-        userImage = (ImageView) findViewById(R.id.user_image);
+        userFirstName = findViewById(R.id.user_first_name);
+        userLastName = findViewById(R.id.user_last_name);
+        userPhone = findViewById(R.id.user_phone_number);
+        userEmail = findViewById(R.id.user_email);
+        userAddress = findViewById(R.id.user_address);
+        userPassword = findViewById(R.id.user_password);
+        userImage = findViewById(R.id.user_image);
 
-        registerBtn = (Button)findViewById(R.id.user_register_btn);
+        Button registerBtn = findViewById(R.id.user_register_btn);
 
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                registerUser();
-            }
-        });
+        registerBtn.setOnClickListener(view -> registerUser());
 
-        userImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checker = "clicked";
+        userImage.setOnClickListener(v -> {
+            checker = "clicked";
 
-                CropImage.activity(imageUri)
-                        .setAspectRatio(1, 1)
-                        .start(RegistrationActivity.this);
-            }
+            CropImage.activity(imageUri)
+                    .setAspectRatio(1, 1)
+                    .start(RegistrationActivity.this);
         });
     }
 
@@ -93,7 +77,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
             userImage.setImageURI(imageUri);
         }else {
-            Toast.makeText(RegistrationActivity.this, "Error: Try Again", Toast.LENGTH_SHORT);
+            Toast.makeText(RegistrationActivity.this, "Error: Try Again", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(RegistrationActivity.this, RegistrationActivity.class));
             finish();
         }
@@ -118,64 +102,52 @@ public class RegistrationActivity extends AppCompatActivity {
 
                 final StorageReference fileRef = storageProfilePictureRef.child(phone + ".jpg");
 
-                uploadTask = fileRef.putFile(imageUri);
-                uploadTask.continueWithTask(new Continuation() {
-                    @Override
-                    public Object then(@NonNull Task task) throws Exception {
-                        if (!task.isSuccessful()){
-                            throw task.getException();
-                        }
-
-                        return fileRef.getDownloadUrl();
+                StorageTask<UploadTask.TaskSnapshot> uploadTask = fileRef.putFile(imageUri);
+                uploadTask.continueWithTask(task -> {
+                    if (!task.isSuccessful()){
+                        throw Objects.requireNonNull(task.getException());
                     }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                             @Override
-                                             public void onComplete(@NonNull Task<Uri> task) {
-                                                 if (task.isSuccessful()) {
-                                                     Uri downloadUri = task.getResult();
-                                                     myUrl = downloadUri.toString();
 
-                                                     mAuth.createUserWithEmailAndPassword(email, password)
-                                                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                                                                 @Override
-                                                                 public void onComplete(@NonNull Task<AuthResult> task) {
-                                                                     if (task.isSuccessful()) {
-                                                                         final DatabaseReference rootRef;
-                                                                         rootRef = FirebaseDatabase.getInstance().getReference();
+                    return fileRef.getDownloadUrl();
+                }).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Uri downloadUri = task.getResult();
+                        myUrl = downloadUri.toString();
 
-                                                                         String uid = mAuth.getCurrentUser().getUid();
+                        mAuth.createUserWithEmailAndPassword(email, password)
+                                .addOnCompleteListener(task1 -> {
+                                    if (task1.isSuccessful()) {
+                                        final DatabaseReference rootRef;
+                                        rootRef = FirebaseDatabase.getInstance().getReference();
 
-                                                                         HashMap<String, Object> userMap = new HashMap<>();
-                                                                         userMap.put("uid", uid);
-                                                                         userMap.put("phone", phone);
-                                                                         userMap.put("email", email);
-                                                                         userMap.put("address", address);
-                                                                         userMap.put("firstName", firstName);
-                                                                         userMap.put("lastName", lastName);
-                                                                         userMap.put("image", myUrl);
+                                        String uid = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
 
-                                                                         rootRef.child("Users").child(uid).updateChildren(userMap)
-                                                                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                                     @Override
-                                                                                     public void onComplete(@NonNull Task<Void> task) {
-                                                                                         loadingBar.dismiss();
-                                                                                         Toast.makeText(RegistrationActivity.this, "You are registered successfully", Toast.LENGTH_SHORT).show();
+                                        HashMap<String, Object> userMap = new HashMap<>();
+                                        userMap.put("uid", uid);
+                                        userMap.put("phone", phone);
+                                        userMap.put("email", email);
+                                        userMap.put("address", address);
+                                        userMap.put("firstName", firstName);
+                                        userMap.put("lastName", lastName);
+                                        userMap.put("image", myUrl);
 
-                                                                                         Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
-                                                                                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                                                         startActivity(intent);
-                                                                                         finish();
-                                                                                     }
-                                                                                 });
-                                                                     } else {
-                                                                         loadingBar.dismiss();
-                                                                         Toast.makeText(RegistrationActivity.this, "Error" + task.getException().toString(), Toast.LENGTH_LONG).show();
-                                                                     }
-                                                                 }
-                                                             });
-                                                 }
-                                             }
-                                         });
+                                        rootRef.child("Users").child(uid).updateChildren(userMap)
+                                                .addOnCompleteListener(task11 -> {
+                                                    loadingBar.dismiss();
+                                                    Toast.makeText(RegistrationActivity.this, "You are registered successfully", Toast.LENGTH_SHORT).show();
+
+                                                    Intent intent = new Intent(RegistrationActivity.this, LoginActivity.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intent);
+                                                    finish();
+                                                });
+                                    } else {
+                                        loadingBar.dismiss();
+                                        Toast.makeText(RegistrationActivity.this, "Error" + Objects.requireNonNull(task1.getException()).getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    }
+                });
 
 
             } else{

@@ -2,7 +2,6 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Interface.ItemClickListener;
 import com.example.myapplication.Models.ContactListItem;
 import com.example.myapplication.ViewHolder.ContactViewHolder;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -31,8 +29,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactsFragment extends Fragment {
 

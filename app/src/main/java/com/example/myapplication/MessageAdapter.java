@@ -27,9 +27,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageViewHolder> {
 
-    private List<Message> userMessagesList;
+    private final List<Message> userMessagesList;
     private FirebaseAuth mAuth;
-    private DatabaseReference usersRef;
     int i = 0;
 
     public MessageAdapter(List<Message> userMessagesList){
@@ -59,7 +58,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         String readStatus = message.getReadStatus();
         String mid = message.getMid();
 
-        usersRef = FirebaseDatabase.getInstance().getReference().child("Users").child(fromUserID);
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference().child("Users").child(fromUserID);
 
         usersRef.addValueEventListener(new ValueEventListener() {
             @Override
